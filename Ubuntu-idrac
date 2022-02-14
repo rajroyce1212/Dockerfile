@@ -1,0 +1,14 @@
+FROM ubuntu
+RUN apt-get update
+RUN apt install -y  sudo software-properties-common
+RUN add-apt-repository --yes --update ppa:ansible/ansible
+RUN apt install -y  python3.9 ansible python3-pip git vim iputils-ping
+RUN git clone https://github.com/rajroyce1212/Ansible-iDRAC.git
+WORKDIR "/Ansible-iDRAC"
+RUN pip3 install -r requirements-python3x.txt
+RUN sh build.sh 1.2 488
+WORKDIR "/Ansible-iDRAC/dist"
+RUN pip install omsdk-1.2.488-py2.py3-none-any.whl
+RUN ansible-galaxy collection install dellemc.openmanage
+WORKDIR "/"
+RUN rm -rf Ansible-iDRAC
