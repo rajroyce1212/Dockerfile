@@ -15,7 +15,7 @@ WORKDIR "/"
 RUN rm -rf Ansible-iDRAC
 RUN ansible-galaxy collection install community.general
 RUN mkdir /root/.ansible/plugins
-RUN mdir /root/.ansible/plugins/modules
+RUN mkdir /root/.ansible/plugins/modules
 RUN cp -R * /root/.ansible/collections/ansible_collections/dellemc/openmanage/plugins/modules/ /root/.ansible/plugins/modules
 RUN cp -R * /root/.ansible/collections/ansible_collections/community/general/plugins/modules/ /root/.ansible/plugins/modules
 RUN cp -R * /root/.ansible/collections/ansible_collections/dellemc/openmanage/ /root/.ansible/collections/ansible_collections/community/general/plugins/modules
