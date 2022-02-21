@@ -13,3 +13,9 @@ RUN pip3 install omsdk-1.2.488-py2.py3-none-any.whl
 RUN ansible-galaxy collection install dellemc.openmanage
 WORKDIR "/"
 RUN rm -rf Ansible-iDRAC
+RUN ansible-galaxy collection install community.general
+RUN mkdir /root/.ansible/plugins
+RUN mdir /root/.ansible/plugins/modules
+RUN cp -R * /root/.ansible/collections/ansible_collections/dellemc/openmanage/plugins/modules/ /root/.ansible/plugins/modules
+RUN cp -R * /root/.ansible/collections/ansible_collections/community/general/plugins/modules/ /root/.ansible/plugins/modules
+RUN cp -R * /root/.ansible/collections/ansible_collections/dellemc/openmanage/ /root/.ansible/collections/ansible_collections/community/general/plugins/modules
