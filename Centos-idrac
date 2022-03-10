@@ -1,0 +1,26 @@
+FROM centos
+RUN yum update -y
+RUN yum install -y sudo git
+RUN sudo yum install -y epel-release vim
+RUN sudo yum install -y gcc openssl-devel bzip2-devel libffi-devel zlib-devel
+RUN wget https://www.python.org/ftp/python/3.9.6/Python-3.9.6.tgz
+RUN tar -xvf Python-3.9.6.tgz
+WORKDIR "/Python-3.9.6"
+RUN ./configure --enable-optimizations
+RUN sudo make altinstall
+RUN sudo yum install -y ansible
+RUN pip3 install wheel
+RUN git config --system http.sslverify false
+RUN cd / &&  git clone https://github.com/rajroyce1212/Ansible-iDRAC.git
+WORKDIR /Ansible-iDRAC
+RUN  cd  /Ansible-iDRAC && \
+	   pip3 install -r /Ansible-iDRAC/requirements-python3x.txt &&\
+	   sh build.sh 1.2 488 && cd dist && pip3 install omsdk-1.2.488-py2.py3-none-any.whl && \
+	   ansible-galaxy collection install dellemc.openmanage --ignore-certs && \
+	   cd / && rm -rf /Ansible-iDRAC && ansible-galaxy collection install community.general --ignore-certs && \
+	   mkdir -p /root/.ansible/plugins &&\
+	   mkdir /root/.ansible/plugins/modules &&\
+     cp -R  /opt/app-root/src/.ansible/collections/ansible_collections/community/general/plugins/modules/* /root/.ansible/plugins/modules &&\
+     cp -R  /opt/app-root/src/.ansible/collections/ansible_collections/dellemc/openmanage/plugins/modules/* /root/.ansible/plugins/modules &&\
+     cp -R /opt/app-root/src/.ansible/collections/ansible_collections/dellemc/openmanage/* /opt/app-root/src/.ansible/collections/ansible_collections/community/general/plugins/modules/
+WORKDIR /
